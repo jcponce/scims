@@ -1,6 +1,6 @@
 # scims
 
-Here you can find the sketch files from the SciMS (Science and Mathematics Simulations) website: [SciMS](https://teaching.smp.uq.edu.au/scims/index.html)
+Here you can find the sketch files from the [SciMS](https://teaching.smp.uq.edu.au/scims/index.html) (Science and Mathematics Simulations) website.
 
 There are four simulations about [Velocity fields](https://teaching.smp.uq.edu.au/scims/Adv_calculus/Velocity_field.html):
 
