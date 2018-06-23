@@ -219,14 +219,14 @@ function field(_time) {
       var xx = j + sc * P(this.time, j, k);
       var yy = k + sc * Q(this.time, j, k);
       	
-			var lj = map(j, -6, 6, -width, width);
-			var lk = map(-k, -4, 4, -height, height);
-			var lx = map(xx, -6, 6, -width, width);
-			var ly = map(-yy, -4, 4, -height, height);
-			stroke(200);
-      strokeWeight(1.5);
-			line(lj-1, lk-1, lx, ly);
-			line(lj+1, lk+1, lx, ly);
+	var lj = map(j, -6, 6, -width, width);
+	var lk = map(-k, -4, 4, -height, height);
+	var lx = map(xx, -6, 6, -width, width);
+	var ly = map(-yy, -4, 4, -height, height);
+	stroke(200);
+	strokeWeight(1.5);
+	line(lj-1, lk-1, lx, ly);
+	line(lj+1, lk+1, lx, ly);
    }
   }
 	
