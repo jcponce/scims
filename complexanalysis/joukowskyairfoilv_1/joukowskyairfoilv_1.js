@@ -7,7 +7,7 @@ Finally the Joukowsky mapping J(z)=z+1/z is applied. Thus the circle C_1 is mapp
 This is known as The Joukowski Airfoil.
 */
 
-//Warning: The code is pretty messy but I will be back later to clean it. :)
+//Warning: The code is pretty messy but I will be back later to improve it. :)
 
 /*
 Feel free to do whatever with this code.
@@ -17,20 +17,37 @@ Send me a note at  j.ponce@uq.edu.au
 
 //http://creativecommons.org/licenses/by-nc/4.0/
 
-let numMax = 500;
+
+/*
+ Last updated 23 jun 2018
+ */
+
+let numMax = 700;
 let t = 0;
 let h = 0.01;
 let particles = [];
-let zoom;
-let offset = new p5.Vector(0,0);
 
 let a = 1;//radius
 
+//vector field variables
+let xmax = 6;
+let xmin = -6;
+let ymax = 4;
+let ymin = -4;
+let sc = 0.15;
+let xstep = 0.5;
+let ystep = 0.5;
+
+let WIDTH = 800;
+let HEIGHT = 500;
+let frameWidth = WIDTH/100;
+let frameHeight = HEIGHT/100;
+
 let currentParticle = 0;
 
-let tshow = false;//trace
+let fshow = false;
+let tshow = false;
 let starting = false;
-let started = true;
 
 let buttonTrace;
 
@@ -40,27 +57,37 @@ let sliderT;//Tranformation using homotopy
 
 let rd=0.23*2*2.54950975679639241501;//radius
 
-let bx = 8; //Limit x to add particles
-let by = 4; //Limit y to add particles
-
 function setup() {
-    
-    createCanvas(800, 500);
+    createCanvas(WIDTH, HEIGHT);
     controls();
-    //
     resetSketch();
-    //background(0);
-    
 }
 
 function resetSketch() {
     
-    for (let i=0; i<numMax; i++) {
-        particles[i] = new Particle(random(-bx,bx),random(-by,by),t,h);
+    //seting up particles
+    for (var i=0; i<numMax; i++) {
+        var valX = random(-frameWidth, frameWidth);
+        var valY = random(-2, frameHeight);
+        particles[i] = new Particle(valX, valY, t, h);
+    }
+    fshow = false;
+    tshow = false;
+    
+}
+
+function fieldShow() {
+    
+    if(fshow==false) {
+        fshow = true;
+    } else{
+        fshow = false;
     }
     
-    tshow = false;
-    starting = false;
+    if(tshow==true) {
+        tshow = false;
+    }
+    
 }
 
 function traceShow() {
@@ -69,6 +96,11 @@ function traceShow() {
     }else{
         tshow = false;
     }
+    
+    if(fshow==true) {
+        fshow = false;
+    }
+    
 }
 
 function draw() {
@@ -87,7 +119,7 @@ function draw() {
     
     //This is for drawing the trace of particles
     if(tshow==true){
-        fill(255,10);
+        fill(255,8);
     } else{
         fill(255,100);
     }
@@ -96,33 +128,31 @@ function draw() {
     strokeWeight(0.5);
     rect(0,0,width,height);
     
-    zoom = 70;
     
-    translate(width/2,height/2);
-    scale(zoom);
-    rotate(PI);
-    translate(offset.x/zoom, offset.y/zoom);
+    
+    translate(width/2, height/2);//we need the oringin at the center
+    
     
     //Reference xy
-    stroke(255, 0, 0,100);
-    strokeWeight(0.015);
-    line(0,0,-1,0);
+    stroke(255, 0, 0);
+    strokeWeight(2);
+    line(0,0,100,0);
     stroke(51, 204, 51,100);
-    line(0,0,0,1);
+    line(0,0,0,-100);
     
     t += h;
-
+    
     if (starting==true) {
-    for (let i=particles.length-1; i>=0; i-=1) {
-        let p = particles[i];
-        p.update();
-        p.display();
-        if ( p.x > bx ||  p.y > by || p.x < -bx ||  p.y < -by ) {
-            particles.splice(i,1);
-            currentParticle--;
-            particles.push(new Particle(random(-bx,-bx+0.5),random(-by,by),t,h) );
+        for (let i=particles.length-1; i>=0; i-=1) {
+            let p = particles[i];
+            p.update();
+            p.display();
+            if ( p.x > frameWidth ||  p.y > frameHeight || p.x < -frameWidth ||  p.y < -frameHeight ) {
+                particles.splice(i,1);
+                currentParticle--;
+                particles.push(new Particle(random(-8, -7.8),random(-frameHeight, frameHeight),t,h) );
+            }
         }
-      }
     }
     
     //This draws the circle to be transformed
@@ -132,21 +162,21 @@ function draw() {
     for(let i = 0; i <= 2*PI; i+=PI/50){
         let xc = cos(i);
         let yc = sin(i);
-        vertex(-(xc*(1-sliderT.value()) + JkTransX(xc,yc)*sliderT.value()  ), yc*(1-sliderT.value())+JkTransY(xc,yc)*sliderT.value());
+        vertex(100*(xc*(1-sliderT.value()) + JkTransX(xc,yc)*sliderT.value()), -100*(yc*(1-sliderT.value())+JkTransY(xc,yc)*sliderT.value()));
     }
     endShape(CLOSE)
     
     //This is the black rectangle for the controls
     noStroke();
-    rect(-6,-5.9,16,3);
+    rect(-400, 200, 800, 50);
     
-    scale(0.3);
-    rotate(-PI);
-    textSize(1);
+    
+    textSize(20);
     fill(255);
-    text('U='+sliderU.value(), -18.8,11);
-    text('C='+sliderC.value(), -9,11);
-    text('T='+sliderT.value(), 3,11);
+    text('U='+sliderU.value(), -390, 230);
+    text('C='+sliderC.value(), -180, 230);
+    text('T='+sliderT.value(), 60, 230);
+    
     
 }
 
@@ -154,48 +184,41 @@ function mousePressed() {
     starting = true;
 }
 
-//This part defines the components of the velocity field
-function componentFX(t, x, y){
-    return 4.9*(   (2 * a*a * sliderU.value() * y*y)/((x*x+ y*y)*(x*x+ y*y)) + sliderU.value()*(1 - (a*a)/(x*x + y*y)) - (sliderC.value()*y)/(2*PI*(x*x + y*y)) );//Change this function
-}
-
-function componentFY(t, x, y){
-    return 4.9*( -(2*a*a * sliderU.value() * x * y)/((x*x+ y*y)*(x*x+ y*y)) + (sliderC.value() * x)/(2*PI*(x*x + y*y)) );//Change this function
-}
+let P = (t, x, y) => 4.9*(   (2 * a*a * sliderU.value() * y*y)/((x*x+ y*y)*(x*x+ y*y)) + sliderU.value()*(1 - (a*a)/(x*x + y*y)) - (sliderC.value()*y)/(2*PI*(x*x + y*y)) );//Change this function
+let Q = (t, x, y) =>  4.9*( -(2*a*a * sliderU.value() * x * y)/((x*x+ y*y)*(x*x+ y*y)) + (sliderC.value() * x)/(2*PI*(x*x + y*y)) );//Change this function
 
 //This part defines the components of the Joukowsky transformation
-function JkTransX(x,y){
-    return rd*x-0.15 + (rd*x-0.15)/((rd*x-0.15)*(rd*x-0.15)+(rd*y+0.23)*(rd*y+0.23));
-}
+let JkTransX = (x,y) => rd*x-0.15 + (rd*x-0.15)/((rd*x-0.15)*(rd*x-0.15)+(rd*y+0.23)*(rd*y+0.23));
 
-function JkTransY(x,y){
-    return rd*y+0.23 - (rd*y+0.23)/((rd*x-0.15)*(rd*x-0.15)+(rd*y+0.23)*(rd*y+0.23));
-}
 
-//This function defines the particles and how they move. I use Runge–Kutta method of fourth degree
+let JkTransY = (x,y) => rd*y+0.23 - (rd*y+0.23)/((rd*x-0.15)*(rd*x-0.15)+(rd*y+0.23)*(rd*y+0.23));
+
+
+
+//Define particles and how they are moved with Runge–Kutta method of 4th degree.
 class Particle{
     
-	constructor(_x, _y, _t, _h){
-    this.x = _x;
-    this.y = _y;
-    this.time = _t;
-    this.radius = random(0.03,0.07);
-    this.h = _h;
-    this.op = random(199,200);
-    this.r = random(0,255);
-    this.g = random(220,255);
-    this.b = random(0,255);
-	}
+    constructor(_x, _y, _t, _h){
+        this.x = _x;
+        this.y = _y;
+        this.time = _t;
+        this.radius = random(3, 5);
+        this.h = _h;
+        this.op = random(199,200);
+        this.r = random(0,255);
+        this.g = random(220,255);
+        this.b = random(0,255);
+    }
     
     update() {
-        this.k1 = componentFX(this.time, this.x, this.y);
-        this.j1 = componentFY(this.time, this.x, this.y);
-        this.k2 = componentFX(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k1, this.y + 1/2 * this.h * this.j1);
-        this.j2 = componentFY(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k1, this.y + 1/2 * this.h * this.j1);
-        this.k3 = componentFX(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k2, this.y + 1/2 * this.h * this.j2);
-        this.j3 = componentFY(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k2, this.y + 1/2 * this.h * this.j2);
-        this.k4 = componentFX(this.time + this.h, this.x + this.h * this.k3, this.y + this.h * this.j3);
-        this.j4 = componentFY(this.time + this.h, this.x + this.h * this.k3, this.y + this.h * this.j3);
+        this.k1 = P(this.time, this.x, this.y);
+        this.j1 = Q(this.time, this.x, this.y);
+        this.k2 = P(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k1, this.y + 1/2 * this.h * this.j1);
+        this.j2 = Q(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k1, this.y + 1/2 * this.h * this.j1);
+        this.k3 = P(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k2, this.y + 1/2 * this.h * this.j2);
+        this.j3 = Q(this.time + 1/2 * this.h, this.x + 1/2 * this.h * this.k2, this.y + 1/2 * this.h * this.j2);
+        this.k4 = P(this.time + this.h, this.x + this.h * this.k3, this.y + this.h * this.j3);
+        this.j4 = Q(this.time + this.h, this.x + this.h * this.k3, this.y + this.h * this.j3);
         this.x = this.x + this.h/6 *(this.k1 + 2 * this.k2 + 2 * this.k3 + this.k4);
         this.y = this.y + this.h/6 *(this.j1 + 2 * this.j2 + 2 * this.j3 + this.j4);
         this.time += this.h;
@@ -204,22 +227,26 @@ class Particle{
     display() {
         fill(this.r, this.b, this.g, this.op);
         noStroke();
-        ellipse(-(this.x*(1-sliderT.value()) + JkTransX(this.x,this.y)*sliderT.value()  ),this.y*(1-sliderT.value())+ JkTransY(this.x,this.y)*sliderT.value(), 2*this.radius, 2*this.radius);
+        this.updatex = map(this.x*(1-sliderT.value()) + JkTransX(this.x,this.y)*sliderT.value(), -8, 8, -width, width);
+        this.updatey = map(-this.y*(1-sliderT.value())- JkTransY(this.x,this.y)*sliderT.value(), -5, 5, -height, height);
+        ellipse(this.updatex, this.updatey, 2*this.radius, 2*this.radius);
+
     }
     
 }
 
-/*This part defines the controls*/
+//Set sliders and buttons
 function controls() {
+    
     buttonTrace = createButton('Trace');
     buttonTrace.position(670, 470);
     buttonTrace.mousePressed(traceShow);
     
-    sliderU = createSlider(0.01, 1, 0.3, 0.01);
+    sliderU = createSlider(0.1, 1, 0.3, 0.1);
     sliderU.position(75, 470);
     sliderU.style('width', '100px');
     
-    sliderC = createSlider(-10, 10, 0, 0.01);
+    sliderC = createSlider(-10, 10, 0, 0.1);
     sliderC.position(290, 470);
     sliderC.style('width', '100px');
     
@@ -228,3 +255,5 @@ function controls() {
     sliderT.style('width', '100px');
     
 }
+
+
