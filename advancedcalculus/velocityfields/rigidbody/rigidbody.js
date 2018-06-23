@@ -1,6 +1,6 @@
-/* Rigid body simulation designed with p5.js (https://p5js.org/)
+/* Near a wall simulation designed with p5.js (https://p5js.org/)
  Under Creative Commons License
- https://creativecommons.org/licenses/by-sa/3.0/
+ https://creativecommons.org/licenses/by-sa/4.0/
  
  Writen by Juan Carlos Ponce Campuzano, 19-August-2017
  */
@@ -9,8 +9,7 @@
  Last update 23-June-2018
  */
 
-
-let numMax = 500;
+let numMax = 400;
 let t = 0;
 let h = 0.01;
 let particles = [];
@@ -18,8 +17,8 @@ let particles = [];
 //vector field variables
 let xmax = 6;
 let xmin = -6;
-let ymax = 4;
-let ymin = -4;
+let ymax = 8;
+let ymin = 0;
 let sc = 0.15;
 let xstep = 0.6;
 let ystep = 0.6;
@@ -50,7 +49,7 @@ function resetSketch() {
     //seting up particles
     for (var i=0; i<numMax; i++) {
         var valX = random(-frameWidth, frameWidth);
-        var valY = random(-frameHeight, frameHeight);
+        var valY = random(0, 5);
         particles[i] = new Particle(valX, valY, t, h);
     }
     fshow = false;
@@ -105,8 +104,8 @@ function draw() {
         text("Click on screen to start", width/2, height/2);
     }
     
-    
-    translate(width/2, height/2);//we need the oringin at the center
+   
+    translate(width/2, height-70);//we need the oringin at the center
     
     if(starting==true) {
         
@@ -123,10 +122,10 @@ function draw() {
             let p = particles[i];
             p.update();
             p.display();
-            if ( p.x > frameWidth ||  p.y > frameHeight || p.x < -frameWidth ||  p.y < -frameHeight ) {
+            if ( p.x > frameWidth ||  p.y > frameHeight || p.x < -frameWidth ||  p.y < 0 ) {
                 particles.splice(i,1);
                 currentParticle--;
-                particles.push(new Particle(random(-frameWidth, frameWidth),random(-frameHeight, frameHeight),t,h) );
+                particles.push(new Particle(random(-frameWidth, frameWidth),random(4.8,5),t,h) );
             }
         }
         
@@ -139,13 +138,12 @@ function draw() {
     //Black background for text and sliders
     noStroke();
     fill(0);
-    rect(-700, 180, 1400, 100);
+    rect(-700, 0, 1400, 100);
     //text
     textSize(16);
     fill(250);
     
-    text('w= '+nfc(sliderk.value(),1,1),-40, 205);//for slider k
-    
+    text('k= '+nfc(sliderk.value(),1,1),-40, 25);//for slider k
     
 }
 
@@ -153,24 +151,24 @@ function mousePressed() {
     starting = true;
 }
 
-var P = (t, x, y) => ( -sliderk.value()*y  );//Change this function
-var Q = (t, x, y) =>  ( sliderk.value()*x );//Change this function
+var P = (t, x, y) => ( sliderk.value()*x  );//Change this function
+var Q = (t, x, y) =>  ( sliderk.value()*(-y) );//Change this function
 
 
 //Define particles and how they are moved with Runge–Kutta method of 4th degree.
 class Particle{
     
-    constructor(_x, _y, _t, _h){
-        this.x = _x;
-        this.y = _y;
-        this.time = _t;
-        this.radius = random(3, 5);
-        this.h = _h;
-        this.op = random(187,200);
-        this.r = random(0);
-        this.g = random(164,255);
-        this.b = random(255);
-    }
+   constructor(_x, _y, _t, _h){
+    this.x = _x;
+    this.y = _y;
+    this.time = _t;
+    this.radius = random(3, 5);
+    this.h = _h;
+    this.op = random(187,200);
+    this.r = random(0);
+    this.g = random(164,255);
+    this.b = random(255);
+	}
     
     update() {
         this.k1 = P(this.time, this.x, this.y);
@@ -198,8 +196,8 @@ class Particle{
 
 //Set sliders and buttons
 function controls() {
-    
-    sliderk = createSlider(-2, 2, 0.5, 0.1);
+
+    sliderk = createSlider(0, 1.5, 0.5, 0.1);
     sliderk.position(230, 470);
     sliderk.style('width', '150px');
     
@@ -231,4 +229,3 @@ function field(_time) {
         }
     }
 }
-
