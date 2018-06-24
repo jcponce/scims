@@ -40,6 +40,8 @@ let ystep = 0.5;
 
 let WIDTH = 800;
 let HEIGHT = 500;
+let frameHeight = HEIGHT/100-2;
+
 
 let currentParticle = 0;
 
