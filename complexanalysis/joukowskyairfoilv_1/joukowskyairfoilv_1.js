@@ -22,7 +22,7 @@ Send me a note at  j.ponce@uq.edu.au
  Last updated 23 jun 2018
  */
 
-let numMax = 700;
+let numMax = 600;
 let t = 0;
 let h = 0.01;
 let particles = [];
@@ -40,8 +40,6 @@ let ystep = 0.5;
 
 let WIDTH = 800;
 let HEIGHT = 500;
-let frameWidth = WIDTH/100;
-let frameHeight = HEIGHT/100;
 
 let currentParticle = 0;
 
@@ -67,26 +65,11 @@ function resetSketch() {
     
     //seting up particles
     for (var i=0; i<numMax; i++) {
-        var valX = random(-frameWidth, frameWidth);
-        var valY = random(-2, frameHeight);
+        var valX = random(-5, 5);
+        var valY = random(-3, 3);
         particles[i] = new Particle(valX, valY, t, h);
     }
-    fshow = false;
     tshow = false;
-    
-}
-
-function fieldShow() {
-    
-    if(fshow==false) {
-        fshow = true;
-    } else{
-        fshow = false;
-    }
-    
-    if(tshow==true) {
-        tshow = false;
-    }
     
 }
 
@@ -128,10 +111,7 @@ function draw() {
     strokeWeight(0.5);
     rect(0,0,width,height);
     
-    
-    
-    translate(width/2, height/2);//we need the oringin at the center
-    
+    translate(width/2, height/2);//we need the origin at the center
     
     //Reference xy
     stroke(255, 0, 0);
@@ -147,10 +127,10 @@ function draw() {
             let p = particles[i];
             p.update();
             p.display();
-            if ( p.x > frameWidth ||  p.y > frameHeight || p.x < -frameWidth ||  p.y < -frameHeight ) {
+            if ( p.x > 4 ||  p.y > 4 || p.x < -5 ||  p.y < -4 ) {
                 particles.splice(i,1);
                 currentParticle--;
-                particles.push(new Particle(random(-8, -7.8),random(-frameHeight, frameHeight),t,h) );
+                particles.push(new Particle(random(-4.5, -4),random(-frameHeight, frameHeight),t,h) );
             }
         }
     }
