@@ -1,4 +1,4 @@
-/* Near a wall simulation designed with p5.js (https://p5js.org/)
+/* Time dependent velocity field simmulation designed with p5.js (https://p5js.org/)
  Under Creative Commons License
  https://creativecommons.org/licenses/by-sa/3.0/
  
@@ -136,10 +136,10 @@ function draw() {
 	//text
 	textSize(16);
   fill(250);
-  text('u0= '+nfc(slideru0.value(),1,1), -320, 205);//for slider u0
-  text('v0= '+nfc(sliderv0.value(),1,1),-200, 205);//for slider v0
-  text('k= '+nfc(sliderk.value(),1,1), -100, 205);//for slider k
-  text('alpha= '+nfc(slideralpha.value(),1,1), -5, 205);//for slider alpha
+  text('u0= '+nfc(slideru0.value(),1,1), -310, 205);//for slider u0
+  text('v0= '+nfc(sliderv0.value(),1,1),-190, 205);//for slider v0
+  text('k= '+nfc(sliderk.value(),1,1), -70, 205);//for slider k
+  text('alpha= '+nfc(slideralpha.value(),1,1), 35, 205);//for slider alpha
 
 }
 
@@ -187,27 +187,27 @@ this.update = function() {
 function controls() {
   
   slideru0 = createSlider(-1, 1, 0.5, 0.1);
-  slideru0.position(10, 470);
+  slideru0.position(10, 460);
   slideru0.style('width', '100px');
   
   sliderv0 = createSlider(-1.5, 1.5, 1, 0.1);
-  sliderv0.position(120, 470);
+  sliderv0.position(130, 460);
   sliderv0.style('width', '100px');
   
   sliderk = createSlider(0, 2, 1.2, 0.1);
-  sliderk.position(230, 470);
+  sliderk.position(250, 460);
   sliderk.style('width', '100px');
   
   slideralpha = createSlider(0, 1.5, 1.4, 0.1);
-  slideralpha.position(340, 470);
+  slideralpha.position(370, 460);
   slideralpha.style('width', '100px');
   
   buttonField = createButton('Field');
-  buttonField.position(590, 470);
+  buttonField.position(590, 460);
   buttonField.mousePressed(fieldShow);
   
   buttonTrace = createButton('Trace');
-  buttonTrace.position(520, 470);
+  buttonTrace.position(520, 460);
   buttonTrace.mousePressed(traceShow);
 
 }
