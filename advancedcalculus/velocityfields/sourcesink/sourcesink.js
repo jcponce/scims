@@ -143,7 +143,7 @@ function draw() {
     textSize(16);
     fill(250);
     
-    text('w= '+nfc(sliderk.value(),1,1),-40, 205);//for slider k
+    text('w= '+nfc(sliderk.value(),1,1),-40, 200);//for slider k
     
     
 }
@@ -199,7 +199,7 @@ class Particle{
 function controls() {
     
     sliderk = createSlider(-3, 3, 1, 0.1);
-    sliderk.position(230, 470);
+    sliderk.position(230, 460);
     sliderk.style('width', '150px');
     
     buttonField = createButton('Field');

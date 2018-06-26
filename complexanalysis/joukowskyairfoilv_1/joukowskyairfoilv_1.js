@@ -22,7 +22,7 @@ Send me a note at  j.ponce@uq.edu.au
  Last updated 23 jun 2018
  */
 
-let numMax = 600;
+let numMax = 450;
 let t = 0;
 let h = 0.01;
 let particles = [];
@@ -41,7 +41,6 @@ let ystep = 0.5;
 let WIDTH = 800;
 let HEIGHT = 500;
 let frameHeight = HEIGHT/100-2;
-
 
 let currentParticle = 0;
 
@@ -225,15 +224,15 @@ function controls() {
     buttonTrace.mousePressed(traceShow);
     
     sliderU = createSlider(0.1, 1, 0.3, 0.1);
-    sliderU.position(75, 470);
+    sliderU.position(75, 460);
     sliderU.style('width', '100px');
     
     sliderC = createSlider(-10, 10, 0, 0.1);
-    sliderC.position(290, 470);
+    sliderC.position(290, 460);
     sliderC.style('width', '100px');
     
     sliderT = createSlider(0, 1, 0, 0.01);
-    sliderT.position(530, 470);
+    sliderT.position(530, 460);
     sliderT.style('width', '100px');
     
 }
