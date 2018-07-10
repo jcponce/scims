@@ -14,14 +14,14 @@ let t = 0;
 let h = 0.01;
 let particles = [];
 
-//vector field variables
+//vector field
 let xmax = 6;
 let xmin = -6;
 let ymax = 4;
 let ymin = -4;
-let sc = 0.15;
+let sc = 0.25;
 let xstep = 0.5;
-let ystep = 0.5;
+let ystep = 0.35;
 
 let WIDTH = 700;
 let HEIGHT = 500;
@@ -47,9 +47,9 @@ function setup() {
 function resetSketch() {
     
     //seting up particles
-    for (var i=0; i<numMax; i++) {
-        var valX = random(-frameWidth, frameWidth);
-        var valY = random(-frameHeight, frameHeight);
+    for (let i=0; i<numMax; i++) {
+        let valX = random(-frameWidth, frameWidth);
+        let valY = random(-frameHeight, frameHeight);
         particles[i] = new Particle(valX, valY, t, h);
     }
     fshow = false;
@@ -152,8 +152,8 @@ function mousePressed() {
     starting = true;
 }
 
-var P = (t, x, y) => ( sliderk.value()*x/(x*x+y*y) );//Change this function
-var Q = (t, x, y) =>  ( sliderk.value()*y/(x*x+y*y) );//Change this function
+let P = (t, x, y) => ( sliderk.value()*x/(x*x+y*y) );//Change this function
+let Q = (t, x, y) =>  ( sliderk.value()*y/(x*x+y*y) );//Change this function
 
 
 //Define particles and how they are moved with Runge–Kutta method of 4th degree.
@@ -217,16 +217,21 @@ function field(_time) {
     this.time = _time;
     for(let k=ymin; k<=ymax; k+=ystep){
         for(let j=xmin; j<=xmax; j+=xstep){
-            let xx = j + sc * P(this.time,j,k);
-            let yy = k + sc * Q(this.time,j,k);
-            var lj = map(j, -6, 6, -width, width);
-            var lk = map(-k, -4, 4, -height, height);
-            var lx = map(xx, -6, 6, -width, width);
-            var ly = map(-yy, -4, 4, -height, height);
-            stroke(200);
-            strokeWeight(1.5);
-            line(lj-1, lk-1, lx, ly);
-            line(lj+1, lk+1, lx, ly);
+            let xx = j + sc * P(this.time, j, k);
+            let yy = k + sc * Q(this.time, j, k);
+            
+            let lj = map(j, -6, 6, -width, width);
+            let lk = map(-k, -4, 4, -height, height);
+            let lx = map(xx, -6, 6, -width, width);
+            let ly = map(-yy, -4, 4, -height, height);
+            let angle = atan2(ly-lk, lx-lj);
+            let dist = sqrt((lk-ly)*(lk-ly)+(lj-lx)*(lj-lx));
+            fill(250,dist);
+            push();
+            translate(lj, lk);
+            rotate(angle);
+            triangle(-15, -4, 15, 0, -15, 4);
+            pop();
         }
     }
 }
