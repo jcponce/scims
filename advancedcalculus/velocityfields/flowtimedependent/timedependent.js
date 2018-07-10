@@ -10,10 +10,10 @@ let h = 0.01;
 let particles = [];
 
 //vector fiel letiables
-let xmax = 6;
-let xmin = -6;
-let ymax = 4;
-let ymin = -4;
+let xmax = 4.5;
+let xmin = -4.5;
+let ymax = 3;
+let ymin = -3;
 let sc = 0.3;//length of vector field
 let xstep = 0.4;
 let ystep = 0.4;
@@ -45,8 +45,8 @@ function setup() {
     
     //seting up particles
     for (let i=0; i<numMax; i++) {
-        let valX = random(-frameWidth, frameWidth);
-        let valY = random(-frameHeight, frameHeight);
+        let valX = random(-9.9, 9.9);
+        let valY = random(-7, 7);
         particles[i] = new Particle(valX, valY, t, h);
     }
     smooth();
@@ -115,7 +115,7 @@ function draw() {
         let p = particles[i];
         p.update();
         p.display();
-        if ( p.x > frameWidth ||  p.y > frameHeight || p.x < -frameWidth ||  p.y < -frameHeight ) {
+        if ( p.x > 9.9 ||  p.y > 7 || p.x < -9.9 ||  p.y < -7 ) {
             particles.splice(i,1);
             currentParticle--;
             particles.push(new Particle(random(-frameWidth, frameWidth),random(-frameHeight, frameHeight),t,h) );
@@ -178,8 +178,8 @@ function Particle(_x, _y, _t, _h) {
     this.display = function() {
         fill(this.r, this.b, this.g, this.op);
         noStroke();//stroke(0,random(220,230),  random(250,255),this.lifespan);
-        this.updatex = map(this.x, -7, 7, -width, width);
-        this.updatey = map(-this.y, -5, 5, -height, height);
+        this.updatex = map(this.x, -9.9, 9.9, -width, width);
+        this.updatey = map(-this.y, -7, 7, -height, height);
         ellipse(this.updatex, this.updatey, 2*this.radius, 2*this.radius);
     };
     
@@ -199,7 +199,7 @@ function controls() {
     sliderk.position(230, 470);
     sliderk.style('width', '100px');
     
-    slideralpha = createSlider(0, 1.5, 1.4, 0.1);
+    slideralpha = createSlider(0, 5, 1.4, 0.1);
     slideralpha.position(340, 470);
     slideralpha.style('width', '100px');
     
@@ -220,17 +220,17 @@ function field(_time) {
             let xx = j + sc * P(this.time, j, k);
             let yy = k + sc * Q(this.time, j, k);
             
-            let lj = map(j, -6, 6, -width, width);
-            let lk = map(-k, -4, 4, -height, height);
-            let lx = map(xx, -6, 6, -width, width);
-            let ly = map(-yy, -4, 4, -height, height);
+            let lj = map(j, -9.9, 9.9, -width, width);
+            let lk = map(-k, -7, 7, -height, height);
+            let lx = map(xx, -9.9, 9.9, -width, width);
+            let ly = map(-yy, -7, 7, -height, height);
             let angle = atan2(ly-lk, lx-lj);
             let dist = sqrt((lk-ly)*(lk-ly)+(lj-lx)*(lj-lx));
-            fill(220,dist);
+            fill(255,dist);
             push();
             translate(lj, lk);
             rotate(angle);
-            triangle(-15, -4, 15, 0, -15, 4);
+            triangle(-9, -3, 9, 0, -9, 3);
             pop();
         }
     }
