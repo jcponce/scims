@@ -225,9 +225,11 @@ function field(_time) {
             let angle = atan2(ly-lk, lx-lj);
             let dist = sqrt((lk-ly)*(lk-ly)+(lj-lx)*(lj-lx))
             fill(255, dist);
+            noStroke();
             push();
             translate(lj, lk);
             rotate(angle);
+            scale(map(dist,0,1.5,0,0.01));
             triangle(-10, -3, 10, 0, -10, 3);
             pop();
         }
