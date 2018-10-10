@@ -6,7 +6,7 @@
  */
 
 /*
- Last update 23-June-2018
+ Last update 10-Oct-2018
  */
 
 let numMax = 700;
@@ -20,8 +20,8 @@ let xmin = -3.5;
 let ymax = 3.5;
 let ymin = -3.5;
 let sc = 0.25;
-let xstep = 0.35;
-let ystep = 0.35;
+let xstep = 0.41;
+let ystep = 0.41;
 
 let WIDTH = 700;
 let HEIGHT = 500;
